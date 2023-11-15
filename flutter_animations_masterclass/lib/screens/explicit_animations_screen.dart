@@ -21,6 +21,16 @@ class _ExplicitAnimationScreenState extends State<ExplicitAnimationScreen>
       _value.value = _animationController.value;
       // });
     });
+  // 애니메이션이 완료되었는지 여부를 알려 주는 StatusListener
+  // 애니메이션이 끝난 뒤 실행시키고 싶은 코드가 있을 때 유용함
+  // ..addStatusListener((status) {
+  //   //
+  //   if (status == AnimationStatus.completed) {
+  //     _animationController.reverse();
+  //   } else if (status == AnimationStatus.dismissed) {
+  //     _animationController.forward();
+  //   }
+  // });
 
   /* for AnimatedBuilder */
   // late final Animation<Color?> _color = ColorTween(
@@ -113,6 +123,23 @@ class _ExplicitAnimationScreenState extends State<ExplicitAnimationScreen>
     super.dispose();
   }
 
+  // 무한 루프를 실행하는 함수
+  bool _looping = false;
+
+  void _toggleLooping() {
+    if (_looping) {
+      _animationController.stop();
+    } else {
+      // reverse는 애니메이션이 끝까지 실행되면 거기서부터 시작하도록 만드는 옵션
+      // (맨 처음으로 점프하지 않음)
+      _animationController.repeat(reverse: true);
+    }
+
+    setState(() {
+      _looping = !_looping;
+    });
+  }
+
   // for Slider
   // double _value = 0.0;
   final ValueNotifier<double> _value = ValueNotifier(0.0);
@@ -186,6 +213,8 @@ class _ExplicitAnimationScreenState extends State<ExplicitAnimationScreen>
                 ElevatedButton(onPressed: _play, child: const Text('play')),
                 ElevatedButton(onPressed: _pause, child: const Text('pause')),
                 ElevatedButton(onPressed: _rewind, child: const Text('rewind')),
+                ElevatedButton(
+                    onPressed: _toggleLooping, child: const Text('looping')),
               ],
             ),
             const SizedBox(height: 25),

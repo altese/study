@@ -214,6 +214,37 @@ class CardDetailScreen extends StatelessWidget {
               // 페이지가 계속 쌓인다.
               child: CreditCard(index: index, isExpanded: false),
             ),
+            ...[
+              for (var _ in [1, 1, 1, 1, 1])
+                Container(
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: ListTile(
+                    tileColor: Colors.grey.shade100,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    leading: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.grey.shade300,
+                      ),
+                      child: const Icon(Icons.shopping_bag),
+                    ),
+                    title: const Text('교보문고', style: TextStyle(fontSize: 18)),
+                    subtitle: Text('강남점',
+                        style: TextStyle(color: Colors.grey.shade800)),
+                    trailing: const Text(
+                      '31,000원',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                )
+            ]
+                .animate(interval: 500.milliseconds)
+                .fadeIn(begin: 0)
+                .flipV(begin: -0.5, end: 0, curve: Curves.elasticInOut),
           ],
         ),
       ),
