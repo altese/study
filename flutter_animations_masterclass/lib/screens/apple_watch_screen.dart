@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class AppleWatch extends StatefulWidget {
@@ -29,21 +31,46 @@ class _AppleWatchState extends State<AppleWatch> {
 }
 
 class AppleWatchPainter extends CustomPainter {
-  // 만든 것을 색상으로 칠해 준다.
   @override
   void paint(Canvas canvas, Size size) {
-    // 좌측 상단 모서리가 (0,0)
-    final rect = Rect.fromLTWH(0, 0, size.width, size.height);
-    final paint = Paint()..color = Colors.blue;
-    // drawRect: 주어진 paint로 사각형을 그림
-    canvas.drawRect(rect, paint);
-    final circlePaint = Paint()
-      ..color = Colors.red
+    final center = Offset(size.width / 2, size.height / 2);
+
+    // draw red
+    final redCirclePaint = Paint()
+      ..color = Colors.red.shade500.withOpacity(0.3)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 20;
-    // 중심(offset), 반지름, paint
-    canvas.drawCircle(
-        Offset(size.width / 2, size.width / 2), size.width / 2, circlePaint);
+      ..strokeWidth = 25;
+
+    canvas.drawCircle(center, (size.width / 2) * 0.9, redCirclePaint);
+
+    // draw green
+    final greenCirclePaint = Paint()
+      ..color = Colors.green.shade500.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25;
+
+    canvas.drawCircle(center, (size.width / 2) * 0.7, greenCirclePaint);
+
+    // draw blue
+    final blueCirclePaint = Paint()
+      ..color = Colors.blue.shade500.withOpacity(0.3)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 25;
+
+    canvas.drawCircle(center, (size.width / 2) * 0.5, blueCirclePaint);
+
+    // red arc
+    final redArcRect =
+        Rect.fromCircle(center: center, radius: (size.width / 2) * 0.9);
+    final redArcPaint = Paint()
+      ..color = Colors.red.shade400
+      ..style = PaintingStyle.stroke
+      // 테두리
+      ..strokeCap = StrokeCap.round
+      ..strokeWidth = 25;
+
+    // rect: 호를 그릴 캔버스, starcAngle: 시작 각도, sweepAngle: 끝날 각도, useCenter: 중심, paint: 그리기
+    canvas.drawArc(redArcRect, -0.5 * pi, 1.5 * pi, false, redArcPaint);
   }
 
   @override
