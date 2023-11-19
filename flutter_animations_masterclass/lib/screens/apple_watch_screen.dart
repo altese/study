@@ -14,13 +14,49 @@ class _AppleWatchState extends State<AppleWatch>
   late final AnimationController _animationController = AnimationController(
     vsync: this,
     duration: const Duration(seconds: 2),
-    lowerBound: 0.005,
-    upperBound: 2.0,
+    /* AnimatinController의 값에 하한, 상한이 지정되는 게 아니라 Tween을 쓸 거면 Tween에 있어야 함!
+
+     lowerBound: 0.005,
+     upperBound: 2.0,
+     */
+
+    // 화면에 들어오자마자 애니메이션 실행
+  )..forward();
+
+  late final CurvedAnimation _curve = CurvedAnimation(
+    parent: _animationController,
+    curve: Curves.bounceOut,
   );
+
+  late Animation<double> _progress = Tween(
+    begin: 0.005,
+    end: 1.5,
+  ).animate(_curve);
 
   // 랜덤한 값으로 애니메이션 값을 바꾸는 함수
   void _animateValues() {
-    _animationController.forward();
+    // _animationController.forward();
+
+    // 트윈이 끝난 지점
+    final newBegin = _progress.value;
+    // 위의 지점부터 진행될 새로운 끝 지점을 계산
+    final random = Random();
+    final newEnd = random.nextDouble() * 2.0;
+    setState(() {
+      _progress = Tween(
+        begin: newBegin,
+        end: newEnd,
+      ).animate(_curve);
+    });
+
+    // 애니메이션이 0부터 다시 시작되도록 설정
+    _animationController.forward(from: 0);
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -34,11 +70,11 @@ class _AppleWatchState extends State<AppleWatch>
       ),
       body: Center(
         child: AnimatedBuilder(
-          animation: _animationController,
+          animation: _progress,
           builder: (context, child) {
             // 그림 그릴 캔버스
             return CustomPaint(
-              painter: AppleWatchPainter(progress: _animationController.value),
+              painter: AppleWatchPainter(progress: _progress.value),
               size: const Size(350, 350),
             );
           },
