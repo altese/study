@@ -27,10 +27,12 @@ class _AppleWatchState extends State<AppleWatch>
     parent: _animationController,
     curve: Curves.bounceOut,
   );
+  // final random = Random();
+  final end = Random().nextDouble() * 1.5;
 
   late Animation<double> _progress = Tween(
     begin: 0.005,
-    end: 1.5,
+    end: end,
   ).animate(_curve);
 
   // 랜덤한 값으로 애니메이션 값을 바꾸는 함수
